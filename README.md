@@ -75,7 +75,22 @@ MAX_POSITION_NOTIONAL ($25M) · MAX_DAILY_NOTIONAL ($100M) · PRICE_COLLAR (±10
 ```bash
 make install        # create .venv and install
 make test           # 18 pytest tests
+```
 
+### Windows
+
+The Makefile is cross-platform, but if you don't have `make`, run the
+equivalent commands manually in PowerShell:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\pip install -e ".[test]"
+.venv\Scripts\python -m pytest tests -q
+```
+
+Note: `configs/mcp_servers.yaml` uses `python3` as the MCP server command;
+on Windows change it to `python` (or the full path to `.venv\Scripts\python.exe`).
+`examples/run_demo.py` and the tests already use the current interpreter.
 # Pure-Python OMS demo (no server needed):
 make demo
 

@@ -1,21 +1,30 @@
-.PHONY: install test demo server clean
+ifeq ($(OS),Windows_NT)
+	PY := python
+	VENV_PY := .venv/Scripts/python.exe
+	VENV_PIP := .venv/Scripts/pip.exe
+else
+	PY := python3
+	VENV_PY := .venv/bin/python
+	VENV_PIP := .venv/bin/pip
+endif
+
+.PHONY: install test demo agent-demo server clean
 
 install:
-	python3 -m venv .venv
-	.venv/bin/pip install -e ".[test]"
+	$(PY) -m venv .venv
+	$(VENV_PIP) install -e ".[test]"
 
 test:
-	.venv/bin/python -m pytest tests/ -q
+	$(VENV_PY) -m pytest tests/ -q
 
 server:
-	.venv/bin/python examples/run_server.py
+	$(VENV_PY) examples/run_server.py
 
 demo:
-	.venv/bin/python examples/run_oms_direct.py
+	$(VENV_PY) examples/run_oms_direct.py
 
 agent-demo:
-	OMSAGENT_URL=http://127.0.0.1:8080 .venv/bin/python examples/run_demo.py
+	$(VENV_PY) examples/run_demo.py
 
 clean:
-	find . -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null; true
-	rm -rf .pytest_cache src/*.egg-info
+	$(VENV_PY) -c "import shutil, pathlib; [shutil.rmtree(p, ignore_errors=True) for p in list(pathlib.Path('.').rglob('__pycache__')) + [pathlib.Path('.pytest_cache')]]"
