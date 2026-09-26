@@ -1,0 +1,15 @@
+# MCP servers the OMS agent client connects to.
+# Each entry: stdio (launched locally) or sse (remote).
+servers:
+  oms:
+    transport: stdio
+    command: python3
+    args: ["-m", "omsagent.servers.oms_mcp"]
+    env: {}
+    # tools exposed: create_order, amend_order, cancel_order, get_order,
+    #   list_orders, run_matching, get_positions, portfolio_summary, get_quote
+
+  # Example remote server (uncomment to use):
+  # risk:
+  #   transport: sse
+  #   url: "http://localhost:9000/sse"
